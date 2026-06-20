@@ -1,37 +1,24 @@
 devil_jin = {
-    'electric_wind_god_fist': {'name': 'Ewgf', 'hitbox': 'high', 'damage': 23, 'startup frames': 13, 'on block': 5, 'on hit': 39},
+    'ewgf': {'name': 'Electric Wind God Fist', 'hitbox': 'high', 'damage': 23, 'startup frames': 13, 'on block': 5, 'on hit': 39},
 
-    {'name': '3,1', 'hitbox': ['mid', 'high'], 'damage': [16, 11], 'startup frames': 17, 'on block': 2, 'on hit': 8},
+    'b4': {'name': 'Steel Pedal', 'hitbox': 'mid', 'damage': 20, 'startup frames': 17, 'on block': -8, 'on hit': 6},
     
-    {'name': 'ws1,1', 'hitbox': ['mid', 'high'], 'damage': [12, 10], 'startup frames': 13, 'on block': 11, 'on hit': 16},
+    'db2' : {'name': 'Malicious Mace', 'hitbox': 'low', 'damage': 15, 'startup frames': 21, 'on block': -13, 'on hit': 3},
     
-    {'name': 'ws2', 'hitbox': 'mid', 'damage': 20, 'startup frames': 14, 'on block': -12, 'on hit': 59},
+    'ws2' : {'name': 'Alaya', 'hitbox': 'mid', 'damage': 20, 'startup frames': 14, 'on block': -12, 'on hit': 59},
 
-    {'name': 'hellsweep', 'hitbox': 'low', 'damage': 25, 'startup frames': 16, 'on block': -23, 'on hit': 42},
+    'b1+2' : {'name': 'Aratama Strike', 'hitbox': 'mid', 'damage': 21, 'startup frames': 20, 'on block': 3, 'on hit': 7},
 }
 
 
 zafina = {
-    {'name': 'df2', 'hitbox': 'mid', 'damage': 23, 'startup frames': 16, 'on block': -12, 'on hit': 32},
+    'ff4' : {'name': 'Roundhouse Kick', 'hitbox': 'mid', 'damage': 16, 'startup frames': 17, 'on block': -8, 'on hit': 6},
 
-    {'name': 'snake edge', 'hitbox': 'low', 'damage': 45, 'startup frames': 28, 'on block': -23, 'on hit': 54},
+    'df2' : {'name': 'Lamashtu claw', 'hitbox': 'mid', 'damage': 13, 'startup frames': 16, 'on block': -12, 'on hit': 22},
     
-    {'name': 'ws1,1', 'hitbox': ['mid', 'high'], 'damage': [12, 10], 'startup frames': 13, 'on block': 11, 'on hit': 16},
+    'd3' : {'name': 'Earwig Pincer', 'hitbox': 'low',  'damage': 14, 'startup frames': 22, 'on block': -15, 'on hit': 5},
     
-    {'name': 'ws2', 'hitbox': 'mid', 'damage': 20, 'startup frames': 14, 'on block': -12, 'on hit': 59},
+    'ws2' : {'name': 'Rising Claw', 'hitbox': 'mid', 'damage': 20, 'startup frames': 18, 'on block': -14, 'on hit': 28},
 
-    {'name': 'hellsweep', 'hitbox': 'low', 'damage': 25, 'startup frames': 16, 'on block': -23, 'on hit': 42},
+    'f3' : {'name': 'Scarecrow Sidekick', 'hitbox': 'high', 'damage': 28, 'startup frames': 17, 'on block': 3, 'on hit': 14},
 }
-
-
-generic_moves = {
-    {'name': 'dickjab', 'hitbox': 'low', 'damage': 5, 'startup frames': 10, 'on block': -5, 'on hit': 6},
-
-    {'name': 'jab', 'hitbox': 'high', 'damage': 5, 'startup frames': 10, 'on block': 1, 'on hit': 8},
-    
-    {'name': 'grab', 'hitbox': 'high', 'damage': 40, 'startup frames': 13, 'on block': 0, 'on hit': 5},
-    
-    {'name': 'block', 'hitbox': None, 'damage': None, 'startup frames': None, 'on block': None, 'on hit': None},
-}
-
-print('')
