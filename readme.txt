@@ -12,12 +12,13 @@ Want to add option to choose character, play as dj or zaf
             try to associate a player variable to relevant dict in movelist.py
             try using a loop to unpack dict into contructor and automate instantiating move objects
             maybe need empty list for loop to save move objects into
-                # honestly might just hardcode data for now and revisit this idea later
+                # honestly might just hardcode data for now and revisit this idea later, something about bunch/munch module, or namedtuples to solve unpacking dict problem, but tuples are immutable so probably cant use namedtuple. im also using nested dict which makes it slightly more complex
 
 
 try to make game an object with functions that increment/reaasign values to track score stats
 frame advantage will need to be updated a lot
 could probably do a health bar here too
+damage calc will probs be Game class method which takes self, player_move and opp_move as args
 
 round order:
 -show opponent random move choice
@@ -45,6 +46,7 @@ def damage_calc(self, opp_move)
         player health bar -= opp_move.damage
         frameadvantage = opp_move.onhit
 
+or make this a Game.method like i mentioned earlier
 
 visualise the steps (pseudo-code i believe):
     start game, (import random most likely)
@@ -89,13 +91,21 @@ visualise the steps (pseudo-code i believe):
                 through error checking n will be 2-5
                 iterate over movelist copy n times, append random choice to new list, delete from movelist copy
             
-            return list
+            return moves
 
         eg: 
         player = dj
         opp = zaf
         oppmove1 = random_move(opp)   #this should get a random zaf move
-        [playermove1, playermove2, playermove3] = random_move(player, 3)   #hopefully this gets 3 different dj moves
+        playermoves = [] #maybe this line is unnecessary
+        playermoves = random_move(player, 3)   #hopefully this gets 3 different dj moves, syntax most definitely might be maybe wrong here
+        hoping to access player move attributes like so:
+            playermoves[1].startup
+            playermoves[2].damage
+            etc...
+
+        
+
 
 
 
