@@ -91,14 +91,32 @@ def restart():
                 continue
 
 
+def prepare_game():
+        current_game = Game()
+        return current_game
 
-def play_dekken():
+def load_dj():
+    #what i want here is to loop through move dictionary taking each key to be the name of the variable that holds each object, unpack the dictionary into the Move() constructor with star notation and add to the empty list. ideally the return value will be a list of djmove objects that will be easy to access later. i will hardcode each object and manually add to a list for now.
+    # djmoves = []
+    # for move in movelist.devil_jin:
+    #     move = movelist.devil_jin[move]
+    #     move = Move(*movelist.devil_jin[move])
+    #     djmoves.append(move)
+    ewgf = Move("Electric Wind God Fist", "high", 23, 13, 5, 39)
+    
+    djmoves = [ewgf, ]
+
+    return djmoves
+
+def load_zaf():
     pass
-
 
 def dekken():
     player, opp = character_choice()
-    play_dekken()
+    game = prepare_game()
+    djmoves = load_dj()
+    zafmoves = load_zaf()
+
     return dekken()
 
 
