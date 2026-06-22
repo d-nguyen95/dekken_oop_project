@@ -137,15 +137,38 @@ def fight(player, opp, game,):
         else:
             movelist_copy = list(move_list)
             random_moves = []
-            for move in range(n):
-                current_rand_num = random.randint(0, len(movelist_copy))
-                random_moves.append(movelist_copy[current_rand_num])
-                movelist_copy.remove(movelist_copy[current_rand_num])
-        return random_moves
+            for _ in range(n):
+                for _ in movelist_copy:
+                    current_rand_num = random.randint(0, len(movelist_copy))
+                    random_moves.append(movelist_copy[current_rand_num])
+                    movelist_copy.remove(movelist_copy[current_rand_num])
+            return random_moves
     
-    opp_move_current = get_rand_move(opp)
-    print(f"{opp} is going to use {opp_move_current}")
-    
+   
+    while game.player_health > 0 or game.opp_health > 0:
+        if game.opp_health <= 0:
+            game.round_win()
+        elif game.player_health <= 0:
+            game.round_loss()
+        else:
+            opp_move_current = get_rand_move(opp)
+            print(f"{opp} is going to use {opp_move_current}")
+            move_choice = get_rand_move(3, player)
+            player_move_current = int(input(f"1) {move_choice[0].name} \n2) {move_choice[1].name} \n3) {move_choice[2].name} \n4) Block"))
+            match player_move_current:
+                case 4:
+                    pass
+                case 1:
+                    pass
+                case 2:
+                    pass
+                case 3:
+                    pass
+                case _:
+                    print("enter 1, 2, 3 or 4")
+
+
+
     
 
 def dekken():
@@ -156,7 +179,7 @@ def dekken():
     else:
         player = load_zaf() and opp = load_dj()
     
-    fight()
+    fight(player, opp, game)
 
 
 
