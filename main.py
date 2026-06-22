@@ -4,6 +4,7 @@ import sys
 
 
 class Game:
+    '''this class will handle tracking of gamestate'''
     def __init__(self, frame_advantage=0, player_health=100, opp_health=100, set_wins=0, set_losses=0, game_wins=0,game_losses=0, round_wins=0, round_losses=0):
         self.frame_advantage = frame_advantage
         self.player_health = player_health
@@ -17,6 +18,7 @@ class Game:
 
 
     def round_win(self):
+        '''this function increments round/game/set wins'''
         self.round_wins += 1
         if self.round_wins == 3:
             self.round_wins = 0
@@ -33,6 +35,7 @@ class Game:
 
 
     def round_loss(self):
+        '''this function increments round/game/set losses'''
         self.round_losses += 1
         if self.round_losses == 3:
             self.round_wins = 0
@@ -49,6 +52,7 @@ class Game:
 
 
 class Move:
+    '''this class will form the objects that hold relevent battle data'''
     def __init__(self, name, hitbox, damage, startup, onblock, onhit):
         self.name = name
         self.hitbox = hitbox
@@ -59,18 +63,16 @@ class Move:
 
 
 def character_choice():
+    '''this function determines character choice'''
     player = ""
     opp = ""
     while True:
-        choice = int(input("Choose your character: \n1) Devil Jin\n" \
-        "2) Zafina\n" \
-        ">: \n"))
+        choice = int(input(
+        "Choose your character: \n1) Devil Jin\n 2) Zafina\n >: "))
         if choice == 1:
-            player = "dj"
-            opp = "zaf"
+            player = "dj" and opp = "zaf"
         elif choice == 2:
-            player = "zaf"
-            opp = "dj"
+            player = "zaf" and opp = "dj"
         else:
             print("Enter 1 or 2")
             continue
@@ -84,7 +86,7 @@ def restart():
             if input == "y":
                 dekken()
             elif input == "n":
-                print("GGEZ")
+                print("GG")
                 sys.exit()
             else:
                 print("Enter 'y' or 'n'")
@@ -92,6 +94,7 @@ def restart():
 
 
 def prepare_game():
+        '''instantiate game object'''
         current_game = Game()
         return current_game
 
@@ -102,22 +105,59 @@ def load_dj():
     #     move = movelist.devil_jin[move]
     #     move = Move(*movelist.devil_jin[move])
     #     djmoves.append(move)
+    '''instantiate dj move objects'''
     ewgf = Move("Electric Wind God Fist", "high", 23, 13, 5, 39)
-    
-    djmoves = [ewgf, ]
+    b4 = Move("Steel Pedal", "mid,", 20, 17, -8, 6)
+    db2 = Move("Malicious Mace", "low", 15, 21, -13, 3)
+    ws2 = Move("Alaya", "mid", 20, 14, -12, 59)
+    b12 = Move("Aratama Strike", "mid", 21, 20, 3, 7)
+    dj = [ewgf, b4, db2, ws2, b12]
 
-    return djmoves
+    return dj
 
 def load_zaf():
-    pass
+    '''instantiate zaf move objects'''
+    ff4 = Move("Roundhouse Kick", "mid", 16, 17, -8, 6)
+    df2 = Move("Lamashtu Claw", "mid", 13, 16, -12, 22)
+    d3 = Move("Earwig Pincer", "low", 14, 22, -15, 5)
+    ws2 = Move("Rising Claw", "mid", 20, 18, -14, 28)
+    f3 = Move("Scarecrow Sidekick", "high", 28, 17, 3, 14)
+    zaf = [ff4, df2, d3, ws2, f3]
+
+    return zaf
+
+def fight(player, opp, game,):
+    '''this function handles combat'''
+
+
+    def get_rand_move(n, move_list):
+        '''this function gets n amount of random moves in provided list with no repeats. Nested because only need it here'''
+        if n == 1:
+            return move_list[random.randint(0, len(move_list))]
+        else:
+            movelist_copy = list(move_list)
+            random_moves = []
+            for move in range(n):
+                current_rand_num = random.randint(0, len(movelist_copy))
+                random_moves.append(movelist_copy[current_rand_num])
+                movelist_copy.remove(movelist_copy[current_rand_num])
+        return random_moves
+    
+    opp_move_current = get_rand_move(opp)
+    print(f"{opp} is going to use {opp_move_current}")
+    
+    
 
 def dekken():
     player, opp = character_choice()
     game = prepare_game()
-    djmoves = load_dj()
-    zafmoves = load_zaf()
+    if player == "dj":
+        player = load_dj() and opp = load_zaf()
+    else:
+        player = load_zaf() and opp = load_dj()
+    
+    fight()
 
-    return dekken()
 
 
 
