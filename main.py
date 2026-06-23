@@ -1,4 +1,3 @@
-import movelist
 import random
 import sys
 
@@ -28,19 +27,55 @@ class Game:
         print(f'Sets {self.set_wins}:{self.set_losses}')
 
 
+    def game_state(self):
+        print(f"\nFrame Advantage: {self.frame_advantage} \nYou: {self.player_health}hp \nOpp: {self.opp_health}hp")
+
+
+    def clash(self, playermove, oppmove):
+        '''this function handles damage calculation'''
+        if playermove.startup - self.frame_advantage < oppmove.startup + self.frame_advantage:
+            self.opp_health -= playermove.damage
+            self.frame_advantage = playermove.onhit
+            self.game_state()
+        elif playermove.startup - self.frame_advantage > oppmove.startup + self.frame_advantage:
+            self.player_health -= oppmove.damage
+            self.frame_advantage = abs(oppmove.onhit)
+            self.game_state()
+        else:
+            self.player_health -= oppmove.damage
+            self.opp_health -= playermove.damage
+            self.frame_advantage = 0
+            self.game_state()
+
+
+    def reset_rounds(self):
+        self.round_wins = 0
+        self.round_losses = 0
+        self.player_health = 100
+        self.opp_health = 100
+        self.frame_advantage = 0
+
+        
+    def reset_games(self):
+        self.game_wins = 0
+        self.game_losses = 0
+
+
     def round_win(self):
         '''this function increments round/game/set wins'''
         self.round_wins += 1
+        self.player_health = 100
+        self.opp_health = 100
+        self.frame_advantage = 0
         self.round_stats()
         if self.round_wins == 3:
-            self.round_wins = 0
-            self.round_losses = 0
             self.game_wins += 1
+            self.reset_rounds()
             self.game_stats()
             if self.game_wins == 2:
-                self.game_wins = 0
-                self.game_losses = 0
                 self.set_wins += 1
+                self.reset_rounds()
+                self.reset_games()
                 self.set_stats()
                 if self.set_wins == 2:
                     print(f"You win! Final score {self.set_wins}:{self.set_losses}\n")
@@ -51,16 +86,22 @@ class Game:
     def round_loss(self):
         '''this function increments round/game/set losses'''
         self.round_losses += 1
+        self.player_health = 100
+        self.opp_health = 100
+        self.frame_advantage = 0
         self.round_stats()
         if self.round_losses == 3:
             self.round_wins = 0
             self.round_losses = 0
             self.game_losses += 1
+            self.reset_rounds()
             self.game_stats()
             if self.game_losses == 2:
                 self.game_wins = 0
                 self.game_losses = 0
                 self.set_losses += 1
+                self.reset_rounds()
+                self.reset_games()
                 self.set_stats()
                 if self.set_losses == 2:
                     print(f"You lose! Final Score {self.set_wins}:{self.set_losses}\n")
@@ -77,6 +118,9 @@ class Move:
         self.onblock = onblock
         self.onhit = onhit
 
+    def __str__(self, stat):
+        print(f"self.{stat}")
+
 
 def character_choice():
     '''this function determines character choice'''
@@ -84,11 +128,13 @@ def character_choice():
     opp = ""
     while True:
         choice = int(input(
-        "Choose your character: \n1) Devil Jin\n 2) Zafina\n >: "))
+        "Choose your character:\n \n1) Devil Jin \n2) Zafina\n \n>>> "))
         if choice == 1:
-            player = "dj" and opp = "zaf"
+            player = "dj"
+            opp = "zaf"
         elif choice == 2:
-            player = "zaf" and opp = "dj"
+            player = "zaf"
+            opp = "dj"
         else:
             print("Enter 1 or 2")
             continue
@@ -98,10 +144,10 @@ def character_choice():
 
 def restart():
         while True:
-            input = str(input("Rematch? y/n?: "))
-            if input == "y":
+            play = str(input("Rematch? y/n?: "))
+            if play == "y":
                 dekken()
-            elif input == "n":
+            elif play == "n":
                 print("GG")
                 sys.exit()
             else:
@@ -113,8 +159,6 @@ def prepare_game():
         '''instantiate game object'''
         current_game = Game()
         return current_game
-
-
 
 
 def load_dj():
@@ -152,38 +196,17 @@ def fight(player, opp, game,):
     def get_rand_move(n, move_list):
         '''this function gets n amount of random moves in provided list with no repeats. Nested because only need it here'''
         if n == 1:
-            return move_list[random.randint(0, len(move_list))]
+            return move_list[random.randint(0, len(move_list)) - 1]
         else:
             movelist_copy = list(move_list)
             random_moves = []
             for _ in range(n):
                 for _ in movelist_copy:
                     current_rand_num = random.randint(0, len(movelist_copy))
-                    random_moves.append(movelist_copy[current_rand_num])
-                    movelist_copy.remove(movelist_copy[current_rand_num])
+                    random_moves.append(movelist_copy[current_rand_num - 1])
+                    movelist_copy.remove(movelist_copy[current_rand_num - 1])
             return random_moves
         
-
-    def game_state():
-        print(f"Frame Advantage: {game.frame_advantage} \nYou: {game.player_health}hp \nOpp: {game.opp_health}hp")
-
-
-    def clash(playermove, oppmove):
-        '''this function handles damage calculation'''
-        if playermove.startup - game.frame_advantage > oppmove.startup + game.frame_advantage:
-            game.opp_health -= playermove.damage
-            game.frame_advantage = playermove.onhit
-            game_state()
-        elif playermove.startup - game.frame_advantage < oppmove.startup + game.frame_advantage:
-            game.player_health -= oppmove.damage
-            game.frame_advantage = oppmove.onhit
-            game_state()
-        else:
-            game.player_health -= oppmove.damage
-            game.opp_health -= playermove.damage
-            game.frame_advantage = 0
-            game_state()
-    
    
     while game.player_health > 0 or game.opp_health > 0:
         if game.opp_health <= 0:
@@ -191,35 +214,42 @@ def fight(player, opp, game,):
         elif game.player_health <= 0:
             game.round_loss()
         else:
-            opp_move_current = get_rand_move(opp)
-            print(f"{str(opp)} is going to use {opp_move_current}")
+            if opp[0].name == "Roundhouse Kick":
+                opp_name = "Zafina"
+            else:
+                opp_name = "Devil Jin"
+
+            opp_move_current = get_rand_move(1, opp)
+            print(f"\n{opp_name} is going to use {opp_move_current.name}\n")
             move_choice = get_rand_move(3, player)
-            player_move_current = int(input(f"Response: \n1) {move_choice[0].name} \n2) {move_choice[1].name} \n3) {move_choice[2].name} \n4) Block \n5) Quit \n>>> "))
+            player_move_current = int(input(f"Response:\n \n1) {move_choice[0].name} \n2) {move_choice[1].name} \n3) {move_choice[2].name} \n4) Block \n5) Quit\n \n>>> "))
             match player_move_current:
                 case 1:
-                    clash(move_choice[0], opp_move_current)
+                    game.clash(move_choice[0], opp_move_current)
                 case 2:
-                    clash(move_choice[1], opp_move_current)
+                    game.clash(move_choice[1], opp_move_current)
                 case 3:
-                    clash(move_choice[2], opp_move_current)
+                    game.clash(move_choice[2], opp_move_current)
                 case 4:
-                    game.frame_advantage = opp_move_current.onblock
+                    game.frame_advantage = abs(opp_move_current.onblock)
                     game.player_health -= 5
-                    game_state()
+                    game.game_state()
                 case 5:
                     print("gg")
                     sys.exit()
                 case _:
-                    print("enter 1, 2, 3 or 4")
+                    print("enter 1, 2, 3, 4 or 5")
 
 
 def dekken():
     player, opp = character_choice()
     game = prepare_game()
     if player == "dj":
-        player = load_dj() and opp = load_zaf()
+        player = load_dj()
+        opp = load_zaf()
     else:
-        player = load_zaf() and opp = load_dj()
+        player = load_zaf()
+        opp = load_dj()
     
     fight(player, opp, game)
 
