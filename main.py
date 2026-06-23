@@ -15,23 +15,37 @@ class Game:
         self.game_losses = game_losses
         self.round_wins = round_wins
         self.round_losses = round_losses
+ 
+    def round_stats(self):
+        print(f'Rounds {self.round_wins}:{self.round_losses}')
+
+
+    def game_stats(self):
+        print(f'Games {self.game_wins}:{self.game_losses}')
+           
+           
+    def set_stats(self):
+        print(f'Sets {self.set_wins}:{self.set_losses}')
 
 
     def round_win(self):
         '''this function increments round/game/set wins'''
         self.round_wins += 1
+        self.round_stats()
         if self.round_wins == 3:
             self.round_wins = 0
             self.round_losses = 0
             self.game_wins += 1
+            self.game_stats()
             if self.game_wins == 2:
                 self.game_wins = 0
                 self.game_losses = 0
                 self.set_wins += 1
+                self.set_stats()
                 if self.set_wins == 2:
                     print(f"You win! Final score {self.set_wins}:{self.set_losses}")
                     restart()
-        print(f"Rounds: {self.round_wins}:{self.round_losses}\n Games: {self.game_wins}:{self.game_losses}\n Sets: {self.set_wins}:{self.set_losses}\n")
+    
 
 
     def round_loss(self):
@@ -98,6 +112,9 @@ def prepare_game():
         current_game = Game()
         return current_game
 
+
+
+
 def load_dj():
     #what i want here is to loop through move dictionary taking each key to be the name of the variable that holds each object, unpack the dictionary into the Move() constructor with star notation and add to the empty list. ideally the return value will be a list of djmove objects that will be easy to access later. i will hardcode each object and manually add to a list for now.
     # djmoves = []
@@ -143,6 +160,27 @@ def fight(player, opp, game,):
                     random_moves.append(movelist_copy[current_rand_num])
                     movelist_copy.remove(movelist_copy[current_rand_num])
             return random_moves
+        
+
+    def game_state():
+        print(f"Frame Advantage: {game.frame_advantage} \nYou: {game.player_health}hp \nOpp: {game.opp_health}hp")
+
+
+    def clash(playermove, oppmove):
+        '''this function handles damage calculation'''
+        if playermove.startup - game.frame_advantage > oppmove.startup + game.frame_advantage:
+            game.opp_health -= playermove.damage
+            game.frame_advantage = playermove.onhit
+            game_state()
+        elif playermove.startup - game.frame_advantage < oppmove.startup + game.frame_advantage:
+            game.player_health -= oppmove.damage
+            game.frame_advantage = oppmove.onhit
+            game_state()
+        else:
+            game.player_health -= oppmove.damage
+            game.opp_health -= playermove.damage
+            game.frame_advantage = 0
+            game_state()
     
    
     while game.player_health > 0 or game.opp_health > 0:
@@ -152,24 +190,26 @@ def fight(player, opp, game,):
             game.round_loss()
         else:
             opp_move_current = get_rand_move(opp)
-            print(f"{opp} is going to use {opp_move_current}")
+            print(f"{str(opp)} is going to use {opp_move_current}")
             move_choice = get_rand_move(3, player)
-            player_move_current = int(input(f"1) {move_choice[0].name} \n2) {move_choice[1].name} \n3) {move_choice[2].name} \n4) Block"))
+            player_move_current = int(input(f"Response: \n1) {move_choice[0].name} \n2) {move_choice[1].name} \n3) {move_choice[2].name} \n4) Block \n5) Quit \n>>> "))
             match player_move_current:
-                case 4:
-                    pass
                 case 1:
-                    pass
+                    clash(move_choice[0], opp_move_current)
                 case 2:
-                    pass
+                    clash(move_choice[1], opp_move_current)
                 case 3:
-                    pass
+                    clash(move_choice[2], opp_move_current)
+                case 4:
+                    game.frame_advantage = opp_move_current.onblock
+                    game.player_health -= 5
+                    game_state()
+                case 5:
+                    print("gg")
+                    sys.exit()
                 case _:
                     print("enter 1, 2, 3 or 4")
 
-
-
-    
 
 def dekken():
     player, opp = character_choice()
@@ -180,8 +220,6 @@ def dekken():
         player = load_zaf() and opp = load_dj()
     
     fight(player, opp, game)
-
-
 
 
 while True:
