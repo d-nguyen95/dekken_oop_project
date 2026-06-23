@@ -43,7 +43,7 @@ class Game:
                 self.set_wins += 1
                 self.set_stats()
                 if self.set_wins == 2:
-                    print(f"You win! Final score {self.set_wins}:{self.set_losses}")
+                    print(f"You win! Final score {self.set_wins}:{self.set_losses}\n")
                     restart()
     
 
@@ -51,18 +51,20 @@ class Game:
     def round_loss(self):
         '''this function increments round/game/set losses'''
         self.round_losses += 1
+        self.round_stats()
         if self.round_losses == 3:
             self.round_wins = 0
             self.round_losses = 0
             self.game_losses += 1
+            self.game_stats()
             if self.game_losses == 2:
                 self.game_wins = 0
                 self.game_losses = 0
                 self.set_losses += 1
+                self.set_stats()
                 if self.set_losses == 2:
                     print(f"You lose! Final Score {self.set_wins}:{self.set_losses}\n")
                     restart()
-        print(f"Rounds: {self.round_wins}:{self.round_losses}\n Games: {self.game_wins}:{self.game_losses}\n Sets: {self.set_wins}:{self.set_losses}\n")
 
 
 class Move:
