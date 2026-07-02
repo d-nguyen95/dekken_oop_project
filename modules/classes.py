@@ -1,5 +1,3 @@
-from main import restart
-
 class Game:
     '''this class will handle tracking of gamestate'''
     def __init__(
@@ -87,11 +85,8 @@ class Game:
                 self.reset_rounds()
                 self.reset_games()
                 self.set_stats()
-                if self._set_wins == 2:
-                    print(f"You win! Final score {self._set_wins}:{self._set_losses}\n")
-                    restart()
+                
     
-
 
     def round_loss(self):
         '''this function increments round/game/set losses'''
@@ -113,9 +108,18 @@ class Game:
                 self.reset_rounds()
                 self.reset_games()
                 self.set_stats()
-                if self._set_losses == 2:
-                    print(f"You lose! Final Score {self._set_wins}:{self._set_losses}\n")
-                    restart()
+
+
+    def game_over(self):
+        if self._set_losses == 2:
+            print(f"You lose! Final Score {self._set_wins}:{self._set_losses}\n")
+            return self._set_losses == 2
+        elif self._set_wins == 2:
+            print(f"You win! Final score {self._set_wins}:{self._set_losses}\n")
+            return self._set_wins == 2
+        else:
+            return False
+
 
 
 class Move:

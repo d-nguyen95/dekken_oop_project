@@ -1,5 +1,6 @@
 import random
 import sys
+from modules import Game
 from modules import Move
 
 
@@ -37,14 +38,12 @@ def restart():
 
 
 def prepare_game():
-        from modules import Game
         '''instantiate game object'''
         current_game = Game()
         return current_game
 
 
 def load_dj():
-        from modules import Move
     #what i want here is to loop through move dictionary taking each key to be the name of the variable that holds each object, unpack the dictionary into the Move() constructor with star notation and add to the empty list. ideally the return value will be a list of djmove objects that will be easy to access later. i will hardcode each object and manually add to a list for now.
     # djmoves = []
     # for move in movelist.devil_jin:
@@ -96,8 +95,12 @@ def fight(player, opp, game):
     while game._player_health > 0 or game._opp_health > 0:
         if game._opp_health <= 0:
             game.round_win()
+            if game.game_over():
+                break
         elif game._player_health <= 0:
             game.round_loss()
+            if game.game_over():
+                break
         else:
             if opp[0].name == "Roundhouse Kick":
                 opp_name = "Zafina"
@@ -123,7 +126,7 @@ def fight(player, opp, game):
                     print("gg")
                     sys.exit()
                 case _:
-                    print("enter 1, 2, 3, 4 or 5")
+                    raise ValueError(print("enter 1, 2, 3, 4 or 5"))
 
 
 def dekken():
@@ -137,7 +140,7 @@ def dekken():
         opp = load_dj()
     
     fight(player, opp, game)
-
+    restart()
 
 if __name__ == "__main__":
     dekken()
